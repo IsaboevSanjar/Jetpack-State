@@ -2,6 +2,8 @@ package sanjar.uz.jetpacksatate
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Checkbox
@@ -15,23 +17,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun WellnessTaskItem(
-    taskName: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    onClose: () -> Unit,
+fun WellnessTaskItemList(
+    list: List<WellnessTask>,
+    onCheckedTask: (WellnessTask, Boolean) -> Unit,
+    onCLoseTask: (WellnessTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically)
-    {
-        Text(
-            text = taskName, modifier = Modifier
-                .weight(1f)
-                .padding(start = 16.dp)
-        )
-        Checkbox(checked = checked, onCheckedChange = onCheckedChange)
-        IconButton(onClick = onClose) {
-            Icon(imageVector = Icons.Filled.Close, contentDescription = "Close")
+    LazyColumn(modifier = modifier) {
+        items(items = list, key = { task -> task.id }) { task ->
+            WellnessTaskItem(taskName = task.label,
+                checked = task.checked,
+                onCheckedChange = { checked -> onCheckedTask(task, checked) },
+                onClose = { onCLoseTask(task) })
         }
     }
+
+
 }
